@@ -1,0 +1,40 @@
+import Redis from 'ioredis';
+declare const redisClient: Redis;
+export declare const CACHE_KEYS: {
+    readonly VIDEO_DETAIL: "video:detail";
+    readonly USER_VIDEOS: "user:videos";
+    readonly HOT_VIDEOS: "hot:videos";
+    readonly SEARCH_RESULTS: "search:results";
+    readonly USER_PROFILE: "user:profile";
+    readonly TRENDING_TAGS: "trending:tags";
+    readonly SYSTEM_CONFIG: "system:config";
+    readonly API_STATS: "api:stats";
+};
+export declare const CACHE_TTL: {
+    readonly VIDEO_DETAIL: 3600;
+    readonly USER_VIDEOS: 1800;
+    readonly HOT_VIDEOS: 300;
+    readonly SEARCH_RESULTS: 60;
+    readonly USER_PROFILE: 7200;
+    readonly TRENDING_TAGS: 900;
+    readonly SYSTEM_CONFIG: 86400;
+    readonly API_STATS: 60;
+};
+export declare const cacheUtils: {
+    get<T>(key: string): Promise<T | null>;
+    set(key: string, value: any, expireSeconds?: number): Promise<void>;
+    del(key: string): Promise<void>;
+    mget<T>(keys: string[]): Promise<(T | null)[]>;
+    mset(keyValues: Record<string, any>, expireSeconds?: number): Promise<void>;
+    getKey(prefix: string, ...parts: string[]): string;
+    incrVideoHotScore(videoId: string, increment?: number): Promise<void>;
+    getHotVideoIds(start?: number, end?: number): Promise<string[]>;
+    hset(key: string, field: string, value: any): Promise<void>;
+    hget<T>(key: string, field: string): Promise<T | null>;
+    hgetall<T>(key: string): Promise<Record<string, T> | null>;
+    setCounter(key: string, expireSeconds: number): Promise<number>;
+    getCounter(key: string): Promise<number>;
+    acquireLock(lockKey: string, expireSeconds: number): Promise<boolean>;
+    releaseLock(lockKey: string): Promise<void>;
+};
+export { redisClient };
